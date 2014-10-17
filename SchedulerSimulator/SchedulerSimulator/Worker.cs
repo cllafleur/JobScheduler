@@ -16,6 +16,7 @@ namespace SchedulerSimulator {
 
 		public Worker(ScheduleManager scheduleManager) {
 			this.timer = new System.Timers.Timer(500);
+			this.timer.AutoReset = false;
 			this.timer.Elapsed += timer_Elapsed;
 			this.scheduleManager = scheduleManager;
 			this.workerThread = new Thread(ExecuteJob);
@@ -24,8 +25,13 @@ namespace SchedulerSimulator {
 		}
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-			UpdateNextJob();
-			SetCurrentJob();
+			try {
+				UpdateNextJob();
+				SetCurrentJob();
+			}
+			finally {
+				this.timer.Start();
+			}
 		}
 
 		private void ExecuteJob() {
@@ -38,9 +44,13 @@ namespace SchedulerSimulator {
 
 		private void RunCurrentJob() {
 			JobRunner runner = new JobRunner(this.currentJob.Task.Details);
-			this.currentJob.Status = JobStatus.Running;
+			lock (this.currentJob.SyncState) {
+				this.currentJob.Status = JobStatus.Running;
+			}
 			runner.Execute();
-			this.currentJob.Status = JobStatus.Done;
+			lock (this.currentJob.SyncState) {
+				this.currentJob.Status = JobStatus.Done;
+			}
 		}
 
 		private void SetCurrentJob() {
@@ -54,7 +64,14 @@ namespace SchedulerSimulator {
 		}
 
 		private void UpdateNextJob() {
-			nextJob = scheduleManager.GetNextJob(nextJob);
+			lock (nextJob.SyncState) {
+				nextJob.Status = JobStatus.Planned;
+				nextJob = null;
+			}
+			nextJob = scheduleManager.GetNextJob();
+			lock (nextJob.SyncState) {
+				nextJob.Status = JobStatus.Pending;
+			}
 		}
 
 		#region IDisposable Members

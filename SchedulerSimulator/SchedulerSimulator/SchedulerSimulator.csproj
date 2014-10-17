@@ -58,6 +58,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Schedule.Ruler\IScheduleComputer.cs" />
+    <Compile Include="Schedule.Ruler\ReplanLowPriorityJob.cs" />
+    <Compile Include="Schedule.Ruler\ReplanLowPriorityJobRulesBuilder.cs" />
     <Compile Include="Schedule.Ruler\RuleCollection.cs" />
     <Compile Include="Schedule\CalendarBuilder.cs" />
     <Compile Include="Schedule\JobCalendar.cs" />
