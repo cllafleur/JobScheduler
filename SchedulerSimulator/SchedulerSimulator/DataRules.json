@@ -1,0 +1,13 @@
+﻿[
+    {
+        "PriorityValue": 1,
+        "RetryCountToEscalate": 2,
+        "RescheduleDuration": 5
+    },
+    {
+        "PriorityValue": 2,
+        "RetryCountToEscalate": 2,
+        "RescheduleDuration": 10
+    }
+
+]
