@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
+using PropertyChanged;
 using SchedulerSimulator.Job;
 using SchedulerSimulator.Schedule;
 
 namespace SchedulerSimulator {
-	class Worker : IDisposable {
+	[ImplementPropertyChanged]
+	class Worker : IDisposable, INotifyPropertyChanged {
 		private Thread workerThread;
 		private AutoResetEvent jobReadyForExecution;
 
@@ -14,7 +17,12 @@ namespace SchedulerSimulator {
 
 		private System.Timers.Timer timer;
 
-		public Worker(GetNextJob nextJobHandler) {
+		public WorkerStatus Status { get; set; }
+
+		public int Id { get; set; }
+
+		public Worker(int id, GetNextJob nextJobHandler) {
+			this.Id = id;
 			this.timer = new System.Timers.Timer(500);
 			this.timer.AutoReset = false;
 			this.timer.Elapsed += timer_Elapsed;
@@ -22,6 +30,9 @@ namespace SchedulerSimulator {
 			this.workerThread = new Thread(ExecuteJob);
 			this.jobReadyForExecution = new AutoResetEvent(false);
 			this.workerThread.Start();
+		}
+
+		public void Start() {
 			this.timer.Start();
 		}
 
@@ -39,7 +50,13 @@ namespace SchedulerSimulator {
 			while (true) {
 				jobReadyForExecution.WaitOne();
 
-				RunCurrentJob();
+				try {
+					this.Status = WorkerStatus.Running;
+					RunCurrentJob();
+				}
+				finally {
+					this.Status = WorkerStatus.Idle;
+				}
 			}
 		}
 
@@ -85,6 +102,12 @@ namespace SchedulerSimulator {
 			workerThread.Abort();
 			jobReadyForExecution.Dispose();
 		}
+
+		#endregion
+
+		#region INotifyPropertyChanged Members
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		#endregion
 	}

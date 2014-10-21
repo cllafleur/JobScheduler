@@ -6,16 +6,27 @@ using SchedulerSimulator.Schedule;
 namespace SchedulerSimulator.View {
 	class UIController {
 		private ScheduleManager manager;
+		private WorkerController workerController;
 		private Timer timer;
 
 		private Collection<JobScheduleStateObserver> observers;
+		private Collection<WorkerObserver> workerObservers;
 		private object syncConsole = new object();
 
 
-		public UIController(ScheduleManager manager) {
+		public UIController(ScheduleManager manager, WorkerController workerController) {
 			this.manager = manager;
+			this.workerController = workerController;
 			observers = new Collection<JobScheduleStateObserver>();
+			workerObservers = new Collection<WorkerObserver>();
 			int consolePositionRow = 2;
+
+			foreach (var worker in workerController.GetWorkers()) {
+				workerObservers.Add(new WorkerObserver(worker, consolePositionRow, syncConsole));
+				consolePositionRow++;
+			}
+			consolePositionRow++;
+
 			foreach (var job in manager.GetJobs()) {
 				observers.Add(new JobScheduleStateObserver(job, consolePositionRow, syncConsole));
 				consolePositionRow++;

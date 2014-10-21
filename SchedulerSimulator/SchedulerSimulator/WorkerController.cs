@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Linq;
 using SchedulerSimulator.Schedule;
 
 namespace SchedulerSimulator {
@@ -16,13 +17,20 @@ namespace SchedulerSimulator {
 		public WorkerController(ScheduleManager manager, int workerCount) {
 			this.workerCount = workerCount;
 			this.manager = manager;
+			this.workers = new Collection<Worker>();
+			for (int i = 0; i < workerCount; ++i) {
+				workers.Add(new Worker(i, new GetNextJob(NextJobHandler)));
+			}
 		}
 
 		public void StartWorkers() {
-			this.workers = new Collection<Worker>();
-			for (int i = 0; i < workerCount; ++i) {
-				workers.Add(new Worker(new GetNextJob(NextJobHandler)));
+			foreach (var worker in workers) {
+				worker.Start();
 			}
+		}
+
+		public Worker[] GetWorkers() {
+			return workers.ToArray();
 		}
 
 		private JobScheduleState NextJobHandler() {

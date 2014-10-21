@@ -21,11 +21,35 @@
         "Id": 4,
         "PlannedRunDate": "PT15S",
         "Priority": 1,
+        "Details": { "RunningDuration": "PT7S" }
+    },
+    {
+        "Id": 1,
+        "PlannedRunDate": "PT4S",
+        "Priority": 1,
+        "Details": { "RunningDuration": "PT10S" }
+    },
+    {
+        "Id": 2,
+        "PlannedRunDate": "PT10S",
+        "Priority": 2,
+        "Details": { "RunningDuration": "PT10S" }
+    },
+    {
+        "Id": 3,
+        "PlannedRunDate": "PT10S",
+        "Priority": 1,
+        "Details": { "RunningDuration": "PT8S" }
+    },
+    {
+        "Id": 4,
+        "PlannedRunDate": "PT15S",
+        "Priority": 1,
         "Details": { "RunningDuration": "PT10S" }
     },
     {
         "Id": 1,
-        "PlannedRunDate": "PT5S",
+        "PlannedRunDate": "PT7S",
         "Priority": 1,
         "Details": { "RunningDuration": "PT10S" }
     },
@@ -49,31 +73,7 @@
     },
     {
         "Id": 1,
-        "PlannedRunDate": "PT5S",
-        "Priority": 1,
-        "Details": { "RunningDuration": "PT10S" }
-    },
-    {
-        "Id": 2,
-        "PlannedRunDate": "PT10S",
-        "Priority": 2,
-        "Details": { "RunningDuration": "PT10S" }
-    },
-    {
-        "Id": 3,
-        "PlannedRunDate": "PT10S",
-        "Priority": 1,
-        "Details": { "RunningDuration": "PT10S" }
-    },
-    {
-        "Id": 4,
-        "PlannedRunDate": "PT15S",
-        "Priority": 1,
-        "Details": { "RunningDuration": "PT10S" }
-    },
-    {
-        "Id": 1,
-        "PlannedRunDate": "PT5S",
+        "PlannedRunDate": "PT8S",
         "Priority": 1,
         "Details": { "RunningDuration": "PT10S" }
     },
