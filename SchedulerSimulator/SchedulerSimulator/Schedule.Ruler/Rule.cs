@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.Serialization;
 namespace SchedulerSimulator {
 	[DataContract]
@@ -10,6 +11,6 @@ namespace SchedulerSimulator {
 		public int RetryCountToEscalate { get; set; }
 
 		[DataMember]
-		public int RescheduleDuration { get; set; }
+		public TimeSpan RescheduleDuration { get; set; }
 	}
 }

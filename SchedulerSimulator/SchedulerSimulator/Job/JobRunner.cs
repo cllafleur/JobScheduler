@@ -10,7 +10,7 @@ namespace SchedulerSimulator.Job {
 		}
 
 		public void Execute() {
-			Thread.Sleep(Convert.ToInt32(this.detail.RunningDuration));
+			Thread.Sleep(this.detail.RunningDuration);
 		}
 	}
 }

@@ -15,7 +15,9 @@ namespace SchedulerSimulator.Schedule {
 				JobScheduleState state = new JobScheduleState();
 				state.Task = job;
 				state.Status = JobStatus.Planned;
+				state.CurrentPriority = job.Priority;
 				state.CurrentPlannedDate = startDate + job.PlannedRunDate;
+				state.InitialPlannedDate = state.CurrentPlannedDate;
 				calendar.Add(state);
 			}
 			return calendar;

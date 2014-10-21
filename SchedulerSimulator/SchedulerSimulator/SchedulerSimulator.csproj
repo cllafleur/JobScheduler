@@ -67,7 +67,10 @@
     <Compile Include="Schedule\JobScheduleCollection.cs" />
     <Compile Include="Schedule\ScheduleManager.cs" />
     <Compile Include="Schedule\JobScheduleState.cs" />
+    <Compile Include="View\JobScheduleStateObserver.cs" />
+    <Compile Include="View\UIController.cs" />
     <Compile Include="Worker.cs" />
+    <Compile Include="WorkerController.cs" />
     <Content Include="DataRules.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

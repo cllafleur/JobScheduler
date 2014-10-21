@@ -1,13 +1,18 @@
-﻿[
+[
+     {
+        "PriorityValue": 0,
+        "RetryCountToEscalate": 0,
+        "RescheduleDuration": "PT2S"
+    },
     {
         "PriorityValue": 1,
         "RetryCountToEscalate": 2,
-        "RescheduleDuration": 5
+        "RescheduleDuration": "PT5S"
     },
     {
         "PriorityValue": 2,
-        "RetryCountToEscalate": 2,
-        "RescheduleDuration": 10
+        "RetryCountToEscalate": 3,
+        "RescheduleDuration": "PT10S"
     }
 
 ]

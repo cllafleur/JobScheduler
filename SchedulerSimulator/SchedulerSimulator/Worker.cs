@@ -10,18 +10,19 @@ namespace SchedulerSimulator {
 
 		private JobScheduleState currentJob;
 		private JobScheduleState nextJob;
-		private ScheduleManager scheduleManager;
+		private GetNextJob nextJobHandler;
 
 		private System.Timers.Timer timer;
 
-		public Worker(ScheduleManager scheduleManager) {
+		public Worker(GetNextJob nextJobHandler) {
 			this.timer = new System.Timers.Timer(500);
 			this.timer.AutoReset = false;
 			this.timer.Elapsed += timer_Elapsed;
-			this.scheduleManager = scheduleManager;
+			this.nextJobHandler = nextJobHandler;
 			this.workerThread = new Thread(ExecuteJob);
 			this.jobReadyForExecution = new AutoResetEvent(false);
 			this.workerThread.Start();
+			this.timer.Start();
 		}
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
@@ -64,13 +65,17 @@ namespace SchedulerSimulator {
 		}
 
 		private void UpdateNextJob() {
-			lock (nextJob.SyncState) {
-				nextJob.Status = JobStatus.Planned;
-				nextJob = null;
+			if (nextJob != null) {
+				lock (nextJob.SyncState) {
+					nextJob.Status = JobStatus.Planned;
+					nextJob = null;
+				}
 			}
-			nextJob = scheduleManager.GetNextJob();
-			lock (nextJob.SyncState) {
-				nextJob.Status = JobStatus.Pending;
+			nextJob = nextJobHandler();
+			if (nextJob != null) {
+				lock (nextJob.SyncState) {
+					nextJob.Status = JobStatus.Pending;
+				}
 			}
 		}
 

@@ -2,6 +2,6 @@
 
 namespace SchedulerSimulator.Schedule.Ruler {
 	interface IScheduleComputer {
-		JobScheduleState EvaluateNextJob(IEnumerable<JobScheduleState> jobs);
+		JobScheduleState[] EvaluateNextJobs(IEnumerable<JobScheduleState> jobs, int jobStateCount);
 	}
 }
