@@ -9,7 +9,7 @@ namespace SchedulerSimulator {
 
 			ScheduleManager manager = new ScheduleManager(new ReplanLowPriorityJob());
 			manager.Init();
-			WorkerController worker = new WorkerController(manager, 1);
+			WorkerController worker = new WorkerController(manager, 2);
 			UIController uiController = new UIController(manager, worker);
 			worker.StartWorkers();
 

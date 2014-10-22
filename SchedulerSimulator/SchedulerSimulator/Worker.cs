@@ -12,44 +12,27 @@ namespace SchedulerSimulator {
 		private AutoResetEvent jobReadyForExecution;
 
 		private JobScheduleState currentJob;
-		private JobScheduleState nextJob;
 		private GetNextJob nextJobHandler;
-
-		private System.Timers.Timer timer;
 
 		public WorkerStatus Status { get; set; }
 
 		public int Id { get; set; }
 
-		public Worker(int id, GetNextJob nextJobHandler) {
+		public Worker(int id, GetNextJob nextJobHandler, AutoResetEvent jobReady) {
 			this.Id = id;
-			this.timer = new System.Timers.Timer(500);
-			this.timer.AutoReset = false;
-			this.timer.Elapsed += timer_Elapsed;
 			this.nextJobHandler = nextJobHandler;
 			this.workerThread = new Thread(ExecuteJob);
-			this.jobReadyForExecution = new AutoResetEvent(false);
+			this.jobReadyForExecution = jobReady;
 			this.workerThread.Start();
-		}
-
-		public void Start() {
-			this.timer.Start();
-		}
-
-		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e) {
-			try {
-				UpdateNextJob();
-				SetCurrentJob();
-			}
-			finally {
-				this.timer.Start();
-			}
 		}
 
 		private void ExecuteJob() {
 			while (true) {
 				jobReadyForExecution.WaitOne();
 
+				SetCurrentJob();
+				if (this.currentJob == null)
+					continue;
 				try {
 					this.Status = WorkerStatus.Running;
 					RunCurrentJob();
@@ -73,26 +56,7 @@ namespace SchedulerSimulator {
 
 		private void SetCurrentJob() {
 			if (currentJob == null || currentJob.Status == JobStatus.Done) {
-				if (nextJob != null) {
-					currentJob = nextJob;
-					nextJob = null;
-					jobReadyForExecution.Set();
-				}
-			}
-		}
-
-		private void UpdateNextJob() {
-			if (nextJob != null) {
-				lock (nextJob.SyncState) {
-					nextJob.Status = JobStatus.Planned;
-					nextJob = null;
-				}
-			}
-			nextJob = nextJobHandler();
-			if (nextJob != null) {
-				lock (nextJob.SyncState) {
-					nextJob.Status = JobStatus.Pending;
-				}
+				currentJob = nextJobHandler();
 			}
 		}
 
@@ -100,7 +64,6 @@ namespace SchedulerSimulator {
 
 		public void Dispose() {
 			workerThread.Abort();
-			jobReadyForExecution.Dispose();
 		}
 
 		#endregion
