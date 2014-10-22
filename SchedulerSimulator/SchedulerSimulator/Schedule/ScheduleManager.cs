@@ -8,6 +8,7 @@ namespace SchedulerSimulator.Schedule {
 		private DateTime startingDate;
 		private JobCalendar calendar;
 		private IScheduleComputer jobRuler;
+		public readonly object syncCalendar = new object();
 
 		private int execCounter;
 
