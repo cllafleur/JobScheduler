@@ -21,7 +21,7 @@ namespace SchedulerSimulator.View {
 		private void PrintWorker() {
 			lock (this.syncConsole) {
 				Console.SetCursorPosition(0, consolePositionRow);
-				Console.Write("Worker: {0} Status: {1,7}", this.worker.Id, this.worker.Status);
+				Console.Write("Worker: {0,2} Status: {1,7}", this.worker.Id, this.worker.Status);
 			}
 		}
 	}
