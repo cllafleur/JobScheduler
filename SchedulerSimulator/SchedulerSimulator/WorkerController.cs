@@ -10,7 +10,6 @@ namespace SchedulerSimulator {
 
 	class WorkerController {
 		private int workerCount;
-		private object syncCollect = new object();
 		private Collection<Worker> workers;
 		private ScheduleManager manager;
 		private System.Timers.Timer timer;
@@ -66,7 +65,7 @@ namespace SchedulerSimulator {
 		}
 
 		private void ClearJobQueue() {
-			lock (this.syncCollect) {
+			lock (manager.syncCalendar) {
 				while (nextJobQueue.Count > 0) {
 					JobScheduleState jobState;
 					if (nextJobQueue.TryDequeue(out jobState))
@@ -79,7 +78,7 @@ namespace SchedulerSimulator {
 
 		private void CollectNextJobs() {
 			lastCollectedJobs = DateTime.Now;
-			lock (this.syncCollect) {
+			lock (manager.syncCalendar) {
 				if (nextJobQueue.Count > 0)
 					return;
 				var jobStates = manager.GetNextJob(workerCount);
